@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import RecorderClient from './lib/recorder.js'
+import RecorderClient from './lib/client.js'
 import {Col,Row} from 'react-bootstrap'
 import myWorker from "./lib/recorderWorker.js"
 

@@ -61,23 +61,20 @@ export default class RecorderClient extends Component {
         console.log(this.state);
     }
     
-		var start = true;
-		
-    toggle() {
-			if(start){
-				this.state.transcription.clear();
+    start() {
+        this.state.transcription.clear();
         this.state.dictate.startListening();
-				start = false;
-			} else {
-				this.state.dictate.stopListening();
-				start = true;
-			}       
     }
-
+    
+    stop() {
+        this.state.dictate.stopListening();
+    }
+    
     render(){
         return(
             <div>
-                <button onClick={this.toggle.bind(this)}>Toggle recorder</button>
+                <button onClick={this.start.bind(this)}>Start</button>
+                <button onClick={this.stop.bind(this)}>Stop</button>
             </div>
         )
     }
