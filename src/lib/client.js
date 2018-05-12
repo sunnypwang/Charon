@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import Dictate from  './dictate.js'
-
+import '../button.css'
 export default class RecorderClient extends Component {
     constructor(props){
         super(props)
         this.state = {
-            token: 10
+            token: 10,
+            buttonState: 'start',
         }
     }
     
@@ -61,6 +62,34 @@ export default class RecorderClient extends Component {
         console.log(this.state);
     }
     
+    clickStart = () => {
+        this.setState({
+            buttonState: 'answer'
+        });
+    }
+    
+    clickAnswer = () => {
+        // window.Dictate.startListening();
+        this.start()
+        this.setState({
+            buttonState: 'stop'
+        });
+    }
+
+    clickContinue = () =>{
+        this.setState({
+            buttonState: 'answer'
+        });
+    }
+    
+    clickStop = () =>{
+        // window.Dictate.stopListening();
+        this.stop()
+        this.setState({
+            buttonState: 'check'
+        });
+    }
+
     start() {
         this.state.transcription.clear();
         this.state.dictate.startListening();
@@ -69,13 +98,31 @@ export default class RecorderClient extends Component {
     stop() {
         this.state.dictate.stopListening();
     }
-    
+
+    check(check_text){
+        if (check_text == this.state.dictate.onResults){
+            this.setState({buttonState: 'continue'});
+        }else{
+            this.setState({buttonState:'answer'});
+        }
+
+    }
+
     render(){
+        var true_text = this.props.text;
         return(
-            <div>
-                <button onClick={this.start.bind(this)}>Start</button>
-                <button onClick={this.stop.bind(this)}>Stop</button>
+            <div className={this.state.buttonState==='start'? "start-button":
+            this.state.buttonState==='answer'? "answer-button":"c-button"}
+            onClick={this.state.buttonState==='start'? this.clickStart: 
+            this.state.buttonState==='answer'? this.clickAnswer :
+            this.state.buttonState==='stop' ? this.clickStop:
+            this.state.buttonState=='check' ? this.check:
+            this.state.buttonState==='continue'? this.clickContinue : ""}>
+                {this.state.buttonState==='start'? 'START': 
+                this.state.buttonState==='answer'? 'ANSWER':
+                this.state.buttonState==='stop'?'STOP':
+                this.state.buttonState==='check'? 'CHECK..':'CONTINUE?'}
             </div>
-        )
+        );
     }
 }

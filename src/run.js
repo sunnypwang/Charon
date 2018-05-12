@@ -7,10 +7,11 @@ import myWorker from "./lib/recorderWorker.js"
 export default class Run extends Component{
 
 	render(){
+		var sending_text = this.props.sending
 			return(
 					<div>
 							<Row>
-									<RecorderClient worker={myWorker} />
+									<RecorderClient worker={myWorker} text={sending_text} />
 							</Row>
 							
 					</div>

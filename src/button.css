@@ -1,0 +1,49 @@
+.start-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size:120%;
+    color :white;
+    width:100%;
+    height:50px;
+    border-width:0;
+    background-color:#E32636;
+}
+
+.answer-button{
+    display: flex;
+    font-size:120%;
+    color :white;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    height:50px;
+    border-width:0;
+    background-color:rgb(34, 209, 136);
+}
+
+.c-button{
+    display: flex;
+    font-size:120%;
+    color :white;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    height:50px;
+    border-width:0;
+    background-color:rgb(31, 139, 189);
+}
+
+.c-button:hover{
+    font-size:150%;
+    background-color:rgb(57, 184, 243);
+}
+
+.answer-button:hover{
+    font-size: 150%;
+    background-color:rgb(47, 236, 158);
+}
+
+.start-button:hover{
+    background-color: rgb(253, 48, 65)
+}
