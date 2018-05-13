@@ -123,10 +123,12 @@ export default class RecorderClient extends Component {
 		var answer = lastTranscript.substr(0,lastTranscript.length-1).replace(/\s/g,'');
         if (check_text == answer){
 			console.log("The Answer is Correct.")
-            this.setState({buttonState: 'continue'});
+            this.setState({buttonState: 'continue',innerText:"CONTINUE?"});
+            return true;
         }else{
 			console.log("The Answer is Wrong.")
-            this.setState({buttonState:'answer'});
+            this.setState({buttonState:'answer',innerText:"ANSWER"});
+            return false;
         }
     }
 
@@ -151,7 +153,7 @@ export default class RecorderClient extends Component {
             onClick={this.state.buttonState==='start'? this.clickStart: 
             this.state.buttonState==='answer'? this.clickAnswer :
             this.state.buttonState==='stop' ? this.clickStop:
-            this.state.buttonState=='check' ? ()=>{this.check(true_text);this.retry();}:
+            this.state.buttonState=='check' ? ()=>{this.check(true_text)? null:this.retry()}:
             this.state.buttonState==='continue'? this.clickContinue : ""}>
                 {this.state.innerText}
             </div>
