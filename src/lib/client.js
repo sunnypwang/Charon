@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Dictate from  './dictate.js'
 import '../button.css'
+
+var lastTranscript;
+
 export default class RecorderClient extends Component {
     constructor(props){
         super(props)
@@ -28,8 +31,8 @@ export default class RecorderClient extends Component {
         this.state.transcription = transcription;
 				
         var dictate = new this.state.window.Dictate({
-            server : "ws://192.168.1.106:8080/client/ws/speech",
-            serverStatus : "ws://192.168.1.106:8080/client/ws/status",
+            server : "ws://192.168.1.107:8080/client/ws/speech",
+            serverStatus : "ws://192.168.1.107:8080/client/ws/status",
             recorderWorkerPath : worker,
             onReadyForSpeech : function() {
                 console.log("READY FOR SPEECH");
@@ -53,6 +56,7 @@ export default class RecorderClient extends Component {
                     console.log("WIP Transcript: ",ans.transcript.toString(),"prob: ",ans.likelihood);
                 }
                 console.log("Best transcript: "+transcription.toString())
+				lastTranscript = transcription.toString();
             },
             onError : function(code, data) {
                 console.log(code,data);
@@ -109,15 +113,21 @@ export default class RecorderClient extends Component {
     }
 
     check(check_text){
-        console.log("HI")
-        console.log("text:" + check_text)
-        console.log(this.state.dictate.onResults)
-        if (check_text == this.state.dictate.onResults){
-            this.setState({buttonState: 'continue',innerText:"CONTINUE?"});
+        //console.log("HI")
+        //console.log("text:" + check_text)
+        //console.log(this.state.dictate.onResults)
+        if(lastTranscript==undefined){
+			lastTranscript="";
+		}
+		console.log(lastTranscript.substr(0,lastTranscript.length-1).replace(/\s/g,''));
+		var answer = lastTranscript.substr(0,lastTranscript.length-1).replace(/\s/g,'');
+        if (check_text == answer){
+			console.log("The Answer is Correct.")
+            this.setState({buttonState: 'continue'});
         }else{
-            this.setState({buttonState:'answer',innerText:"ANSWER"});
+			console.log("The Answer is Wrong.")
+            this.setState({buttonState:'answer'});
         }
-
     }
 
     retry(){

@@ -4,9 +4,9 @@ import $ from 'jquery'
 export default function(window){
     console.log("Function in dictate called")
 	// Defaults
-	var SERVER = "ws://192.168.1.106:8080/client/ws/speech";
-	var SERVER_STATUS = "ws://192.168.1.106:8080/client/ws/status";
-	var REFERENCE_HANDLER = "ws://192.168.1.106:8080/client/dynamic/reference";
+	var SERVER = "ws://192.168.1.107:8080/client/ws/speech";
+	var SERVER_STATUS = "ws://192.168.1.107:8080/client/ws/status";
+	var REFERENCE_HANDLER = "ws://192.168.1.107:8080/client/dynamic/reference";
 	var CONTENT_TYPE = "content-type=audio/x-raw,+layout=(string)interleaved,+rate=(int)16000,+format=(string)S16LE,+channels=(int)1";
 	// Send blocks 4 x per second as recommended in the server doc.
 	var INTERVAL = 250;
