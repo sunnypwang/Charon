@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Dictate from  './dictate.js'
 import '../button.css'
+import {showList} from './showList.js'
 
 var lastTranscript;
 
@@ -14,7 +15,8 @@ export default class RecorderClient extends Component {
             transcription:null,
             dictate: null,
             try:0,
-            innerText:"START"
+            innerText:"START",
+            index:-1
         }
     }
     
@@ -67,7 +69,8 @@ export default class RecorderClient extends Component {
         });
         this.state.dictate = dictate;
         this.state.dictate.init();
-        
+        this.setState({ index: Math.floor(Math.random()*(showList.length)) })
+     
         console.log(this.state);
     }
     
@@ -112,6 +115,7 @@ export default class RecorderClient extends Component {
         this.state.dictate.stopListening();
     }
 
+
     check(check_text){
         //console.log("HI")
         //console.log("text:" + check_text)
@@ -123,7 +127,8 @@ export default class RecorderClient extends Component {
 		var answer = lastTranscript.substr(0,lastTranscript.length-1).replace(/\s/g,'');
         if (check_text == answer){
 			console.log("The Answer is Correct.")
-            this.setState({try:3,buttonState: 'continue',innerText:"CONTINUE?"});
+            this.setState({try:3,buttonState: 'continue',
+            innerText:"CONTINUE?",index: Math.floor(Math.random()*(showList.length)) });
             return true;
         }else{
 			console.log("The Answer is Wrong.")
@@ -135,27 +140,43 @@ export default class RecorderClient extends Component {
     retry(){
         console.log("TRY: "+this.state.try)
         var try_count = this.state.try + 1;
-        if(try_count != 3){
+        if(try_count < 3){
             this.setState({try:try_count})
         }else{
             this.setState({
-                buttonState:"continue",innerText:"CONTINUE?"
+                buttonState:"continue",innerText:"CONTINUE?",try:0,
+                index: Math.floor(Math.random()*(showList.length))
             })
         }
 
     }
 
     render(){
-        var true_text = this.props.text;
+        console.log("INDEX-b: "+this.state.index)
+        var true_text = showList[this.state.index]
+        console.log(true_text)
         return(
-            <div className={this.state.buttonState==='start'? "start-button":
-            this.state.buttonState==='answer'? "answer-button":"c-button"}
-            onClick={this.state.buttonState==='start'? this.clickStart: 
-            this.state.buttonState==='answer'? this.clickAnswer :
-            this.state.buttonState==='stop' ? this.clickStop:
-            this.state.buttonState=='check' ? ()=>{this.check(true_text)? null:this.retry()}:
-            this.state.buttonState==='continue'? this.clickContinue : ""}>
-                {this.state.innerText}
+            <div>
+                <div style={{height:'400px', display:'flex', flex:1,justifyContent:'center',paddingTop:'5%'}}>
+                {this.state.buttonState=="start"? <p className="text">Hi.</p>:
+                this.state.buttonState == "answer" || this.state.buttonState == "stop" || this.state.buttonState == "check"? 
+                        <p className="text">
+                            {showList[this.state.index]}
+                        </p>:
+                this.state.buttonState =="continue"? <p className="text"> </p>:<p className="text"> </p>}
+                </div>
+                <div style={{width:'10%', margin:"0 auto"}}>
+                
+                    <div className={this.state.buttonState==='start'? "start-button":
+                    this.state.buttonState==='answer'? "answer-button":"c-button"}
+                    onClick={this.state.buttonState==='start'? this.clickStart: 
+                    this.state.buttonState==='answer'? this.clickAnswer :
+                    this.state.buttonState==='stop' ? this.clickStop:
+                    this.state.buttonState=='check' ? ()=>{this.check(true_text)? null:this.retry()}:
+                    this.state.buttonState==='continue'? this.clickContinue : ""}>
+                        {this.state.innerText}
+                    </div>
+                </div>
             </div>
         );
     }

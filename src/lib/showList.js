@@ -1,9 +1,3 @@
-import React, { Component } from 'react';
-import './text-screen.css';
-import wordList from './wordlist.js';
-import PropTypes from 'prop-types';
-import Run from './run'
-
 const showList = ["นัน",
 "เรินดัง",
 "มาการอง",
@@ -226,16 +220,4 @@ const showList = ["นัน",
 "ข้าวต้มมัด",
 "ข้าวผัดมันกุ้ง"];
 
-
-class RandomText extends Component {
-
-    render() {
-        return (
-            <div>
-                <Run/>
-            </div>
-        );
-    }
-}
-
-export default RandomText;
+export { showList }
