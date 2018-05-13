@@ -257,7 +257,7 @@ class RandomText extends Component {
                 this.state.button=="ans"? this.setState({button:"stop"}):
                 this.state.button=="stop"? this.setState({button:"check"}):
                 this.state.button=="check"? this.setState({button:"continue"}):this.setState({button:"ans"})}}>
-                <Run/>
+                <Run sending={showList[index]}/>
             </div>
             </div>
         );

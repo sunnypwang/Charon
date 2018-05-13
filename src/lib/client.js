@@ -7,6 +7,9 @@ export default class RecorderClient extends Component {
         this.state = {
             token: 10,
             buttonState: 'start',
+            window:{},
+            transcription:null,
+            dictate: null,
         }
     }
     
@@ -100,6 +103,9 @@ export default class RecorderClient extends Component {
     }
 
     check(check_text){
+        console.log("HI")
+        console.log("text:" + check_text)
+        console.log(this.state)
         if (check_text == this.state.dictate.onResults){
             this.setState({buttonState: 'continue'});
         }else{
@@ -116,7 +122,7 @@ export default class RecorderClient extends Component {
             onClick={this.state.buttonState==='start'? this.clickStart: 
             this.state.buttonState==='answer'? this.clickAnswer :
             this.state.buttonState==='stop' ? this.clickStop:
-            this.state.buttonState=='check' ? this.check:
+            this.state.buttonState=='check' ? this.check(true_text):
             this.state.buttonState==='continue'? this.clickContinue : ""}>
                 {this.state.buttonState==='start'? 'START': 
                 this.state.buttonState==='answer'? 'ANSWER':
