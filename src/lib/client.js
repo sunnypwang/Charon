@@ -10,6 +10,8 @@ export default class RecorderClient extends Component {
             window:{},
             transcription:null,
             dictate: null,
+            try:0,
+            innerText:"START"
         }
     }
     
@@ -67,7 +69,8 @@ export default class RecorderClient extends Component {
     
     clickStart = () => {
         this.setState({
-            buttonState: 'answer'
+            buttonState: 'answer',
+            innerText:'ANSWER'
         });
     }
     
@@ -75,13 +78,15 @@ export default class RecorderClient extends Component {
         // window.Dictate.startListening();
         this.start()
         this.setState({
-            buttonState: 'stop'
+            buttonState: 'stop',
+            innerText:'STOP'
         });
     }
 
     clickContinue = () =>{
         this.setState({
-            buttonState: 'answer'
+            buttonState: 'answer',
+            innerText:'ANSWER'
         });
     }
     
@@ -89,7 +94,8 @@ export default class RecorderClient extends Component {
         // window.Dictate.stopListening();
         this.stop()
         this.setState({
-            buttonState: 'check'
+            buttonState: 'check',
+            innerText:"CHECK.."
         });
     }
 
@@ -105,11 +111,24 @@ export default class RecorderClient extends Component {
     check(check_text){
         console.log("HI")
         console.log("text:" + check_text)
-        console.log(this.state)
+        console.log(this.state.dictate.onResults)
         if (check_text == this.state.dictate.onResults){
-            this.setState({buttonState: 'continue'});
+            this.setState({buttonState: 'continue',innerText:"CONTINUE?"});
         }else{
-            this.setState({buttonState:'answer'});
+            this.setState({buttonState:'answer',innerText:"ANSWER"});
+        }
+
+    }
+
+    retry(){
+        console.log("TRY: "+this.state.try)
+        var try_count = this.state.try + 1;
+        if(try_count != 3){
+            this.setState({try:try_count,buttonState:'answer'})
+        }else{
+            this.setState({
+                buttonState:"continue",innerText:"CONTINUE?"
+            })
         }
 
     }
@@ -122,12 +141,9 @@ export default class RecorderClient extends Component {
             onClick={this.state.buttonState==='start'? this.clickStart: 
             this.state.buttonState==='answer'? this.clickAnswer :
             this.state.buttonState==='stop' ? this.clickStop:
-            this.state.buttonState=='check' ? this.check(true_text):
+            this.state.buttonState=='check' ? ()=>{this.check(true_text);this.retry();}:
             this.state.buttonState==='continue'? this.clickContinue : ""}>
-                {this.state.buttonState==='start'? 'START': 
-                this.state.buttonState==='answer'? 'ANSWER':
-                this.state.buttonState==='stop'?'STOP':
-                this.state.buttonState==='check'? 'CHECK..':'CONTINUE?'}
+                {this.state.innerText}
             </div>
         );
     }

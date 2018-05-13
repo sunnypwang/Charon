@@ -233,32 +233,60 @@ class RandomText extends Component {
         this.state = {
             index: -1,
             reload:false,
-            button:'start'
+            button:'start',
+            try:0
         }
     }
     
     componentDidMount() {
         this.setState({ index: Math.floor(Math.random()*(showList.length)) })
+        console.log("index : " + this.state.index)
     }
+
+    retry(){
+        var try_count = this.state.try + 1
+        console.log("SCREEN STATE : " + this.state.button)
+        if(try_count < 3){
+            this.setState({
+                try:try_count,
+                button:'ans'
+            })
+        }else{
+            this.setState({
+                try:0,
+                button:'continue',
+            })
+            console.log("SCREEN STATE : " + this.state.button)
+        }
+    }
+    reload(index){
+        this.setState({button:"ans",index:index});
+    }
+
     render() {
-        const { index } = this.state;
+        if(this.state.button == "continue"){
+            var index = Math.floor(Math.random()*(showList.length));
+        }
+        // console.log("INDEX : "+index)
+        // console.log("STATE : "+this.state.button)
         return (
             <div>
                 <div style={{height:'400px', display:'flex', flex:1,justifyContent:'center',paddingTop:'5%'}}>
                 {this.state.button=="start"? <p className="text">Hi.</p>:
                 this.state.button == "ans" || this.state.button == "stop" || this.state.button == "check"? 
                         <p className="text">
-                            {showList[index]}
+                            {showList[index==null? this.state.index:index]}
                         </p>:
-                this.state.button =="continue"? <p className="text"></p>:""}
+                this.state.button =="continue"? <p className="text"> </p>:<p className="text"> </p>}
                 </div>
                 <div style={{width:'10%', margin:"0 auto"}} 
                 onClick={()=> {this.state.button=="start" ? this.setState({button:"ans"}): 
                 this.state.button=="ans"? this.setState({button:"stop"}):
                 this.state.button=="stop"? this.setState({button:"check"}):
-                this.state.button=="check"? this.setState({button:"continue"}):this.setState({button:"ans"})}}>
-                <Run sending={showList[index]}/>
-            </div>
+                this.state.button=="check"? this.retry():
+                this.state.button=="continue" ? this.reload(index):null}}>
+                    <Run sending={showList[index==null? this.state.index:index]}/>
+                </div>
             </div>
         );
     }
