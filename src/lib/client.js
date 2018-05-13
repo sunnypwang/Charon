@@ -127,7 +127,7 @@ export default class RecorderClient extends Component {
 		var answer = lastTranscript.substr(0,lastTranscript.length-1).replace(/\s/g,'');
         if (check_text == answer){
 			console.log("The Answer is Correct.")
-            this.setState({try:3,buttonState: 'continue',
+            this.setState({try:0,buttonState: 'continue',
             innerText:"CONTINUE?",index: Math.floor(Math.random()*(showList.length)) });
             return true;
         }else{
