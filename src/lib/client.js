@@ -123,7 +123,7 @@ export default class RecorderClient extends Component {
 		var answer = lastTranscript.substr(0,lastTranscript.length-1).replace(/\s/g,'');
         if (check_text == answer){
 			console.log("The Answer is Correct.")
-            this.setState({buttonState: 'continue',innerText:"CONTINUE?"});
+            this.setState({try:3,buttonState: 'continue',innerText:"CONTINUE?"});
             return true;
         }else{
 			console.log("The Answer is Wrong.")
@@ -136,7 +136,7 @@ export default class RecorderClient extends Component {
         console.log("TRY: "+this.state.try)
         var try_count = this.state.try + 1;
         if(try_count != 3){
-            this.setState({try:try_count,buttonState:'answer'})
+            this.setState({try:try_count})
         }else{
             this.setState({
                 buttonState:"continue",innerText:"CONTINUE?"
