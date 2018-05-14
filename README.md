@@ -3,7 +3,7 @@ Charon is a Word Guessing Game Application using auto speech recognition to dete
 
 ## Setup
 1. This project uses React. In order to run React you need `npm`, which can be installed with `node.js` installer.
-2. Replace `HCLC.fst` and `words.txt` in your ASR model.
+2. Replace `HCLC.fst` and `words.txt` provided in `model` in your ASR model.
 3. Set up and start your kaldi gstreamer server.
 4. Go to `src/lib/client.js` and replace the web socket address with your kaldi gstreamer address.
 ```
