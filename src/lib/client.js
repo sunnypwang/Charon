@@ -16,7 +16,9 @@ export default class RecorderClient extends Component {
             dictate: null,
             try:0,
             innerText:"START",
-            index:-1
+            index:-1,
+            score:0,
+            play:0
         }
     }
     
@@ -91,10 +93,10 @@ export default class RecorderClient extends Component {
     }
 
     clickContinue = () =>{
-        this.setState({
-            buttonState: 'answer',
-            innerText:'ANSWER'
-        });
+            this.setState({
+                buttonState: 'answer',
+                innerText:'ANSWER'
+            });
     }
     
     clickStop = () =>{
@@ -124,12 +126,22 @@ export default class RecorderClient extends Component {
 			lastTranscript="";
 		}
 		console.log(lastTranscript.substr(0,lastTranscript.length-1).replace(/\s/g,''));
-		var answer = lastTranscript.substr(0,lastTranscript.length-1).replace(/\s/g,'');
+        var answer = lastTranscript.substr(0,lastTranscript.length-1).replace(/\s/g,'');
+        var score = this.state.score
+        var play = this.state.play
+        console.log(play)
         if (check_text == answer){
-			console.log("The Answer is Correct.")
-            this.setState({try:3,buttonState: 'continue',
-            innerText:"CONTINUE?",index: Math.floor(Math.random()*(showList.length)) });
-            return true;
+            console.log("The Answer is Correct.")
+            if ((play+1) == 10){
+                console.log("END")
+                this.setState({buttonState:'end',innerText:"FINISH"});
+                return true;
+            }else{
+                this.setState({try:0,buttonState: 'continue',
+                innerText:"CONTINUE?",index: Math.floor(Math.random()*(showList.length)),
+                play:play+1,score:score+1});
+                return true;
+            }
         }else{
 			console.log("The Answer is Wrong.")
             this.setState({buttonState:'answer',innerText:"ANSWER"});
@@ -138,42 +150,65 @@ export default class RecorderClient extends Component {
     }
 
     retry(){
-        console.log("TRY: "+this.state.try)
+        // console.log("TRY: "+this.state.try)
         var try_count = this.state.try + 1;
+        var play = this.state.play
         if(try_count < 3){
             this.setState({try:try_count})
         }else{
-            this.setState({
-                buttonState:"continue",innerText:"CONTINUE?",try:0,
-                index: Math.floor(Math.random()*(showList.length))
-            })
+            if(play+1 == 10){
+                console.log("END")
+                this.setState({buttonState:'end',innerText:"FINISH"});
+                return true;
+            }else{
+                this.setState({
+                    buttonState:"continue",innerText:"CONTINUE?",try:0,
+                    index: Math.floor(Math.random()*(showList.length)),
+                    play: play+1
+                })
+            }
         }
 
     }
 
     render(){
-        console.log("INDEX-b: "+this.state.index)
+        // console.log("INDEX-b: "+this.state.index)
         var true_text = showList[this.state.index]
-        console.log(true_text)
+        // console.log(true_text)
+        // console.log("PLAY : "+this.state.play)
         return(
             <div>
+                {this.state.buttonState == "answer" || 
+                this.state.buttonState == "stop" || 
+                this.state.buttonState == "check" ||
+                this.state.buttonState =="continue"?
+                <div style={{height:'30px'}}>
+                    <br/>
+                    <p style={{color:'#0cad9f',fontSize:'20px'}}>Score : {this.state.score} / 10 </p>
+                </div>:null}
                 <div style={{height:'400px', display:'flex', flex:1,justifyContent:'center',paddingTop:'5%'}}>
                 {this.state.buttonState=="start"? <p className="text">Hi.</p>:
                 this.state.buttonState == "answer" || this.state.buttonState == "stop" || this.state.buttonState == "check"? 
                         <p className="text">
                             {showList[this.state.index]}
                         </p>:
-                this.state.buttonState =="continue"? <p className="text"> </p>:<p className="text"> </p>}
+                this.state.buttonState =="continue"? <p className="text"> </p>:
+                this.state.buttonState =="end"? 
+                    <div>
+                        <p className="ending"> Thank You For Playing </p>
+                        <p className="score"> {this.state.score} / 10 </p>
+                    </div>:null}
                 </div>
                 <div style={{width:'10%', margin:"0 auto"}}>
                 
                     <div className={this.state.buttonState==='start'? "start-button":
-                    this.state.buttonState==='answer'? "answer-button":"c-button"}
+                    this.state.buttonState==='answer'? "answer-button":
+                    this.state.buttonState==='end'?"finish-button":"c-button"}
                     onClick={this.state.buttonState==='start'? this.clickStart: 
                     this.state.buttonState==='answer'? this.clickAnswer :
                     this.state.buttonState==='stop' ? this.clickStop:
                     this.state.buttonState=='check' ? ()=>{this.check(true_text)? null:this.retry()}:
-                    this.state.buttonState==='continue'? this.clickContinue : ""}>
+                    this.state.buttonState==='continue'? this.clickContinue :null}>
                         {this.state.innerText}
                     </div>
                 </div>
