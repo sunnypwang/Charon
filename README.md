@@ -11,12 +11,15 @@ server : "ws://192.168.1.107:8080/client/ws/speech",
 serverStatus : "ws://192.168.1.107:8080/client/ws/status",
 ```
 5. Go to the project root directory.
-6. To start the web application, type the following command in command line.
+6. Before start the web application, type the following command in command line.
+```
+ npm install
+```
+7. To start the web application, type the following command in command line.
 ```
 npm start
 ```
-
-7. React will start your browser automatically. If it fails to do so, you can manually go to `http://localhost:3000/`
+8. React will start your browser automatically. If it fails to do so, you can manually go to `http://localhost:3000/`
 
 
 ## How to play
